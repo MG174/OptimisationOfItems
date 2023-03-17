@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 
 public class Item
 {
@@ -39,9 +40,9 @@ class Program
         //E.Add(new Item { name = "e2", X = 2000, Y = 2000 });
 
         //Random mock data
-        for (int i = 0; i < 1000000; i++) 
+        for (int i = 0; i < 1000000; i++)
         {
-            A.Add(new Item { name = $"{RandomGenerator.RandomString(10)}", X = RandomGenerator.RandomInt(500,5000), Y = RandomGenerator.RandomInt(500, 5000) });
+            A.Add(new Item { name = $"{RandomGenerator.RandomString(10)}", X = RandomGenerator.RandomInt(500, 5000), Y = RandomGenerator.RandomInt(500, 5000) });
             B.Add(new Item { name = $"{RandomGenerator.RandomString(10)}", X = RandomGenerator.RandomInt(500, 5000), Y = RandomGenerator.RandomInt(500, 5000) });
             C.Add(new Item { name = $"{RandomGenerator.RandomString(10)}", X = RandomGenerator.RandomInt(500, 5000), Y = RandomGenerator.RandomInt(500, 5000) });
             D.Add(new Item { name = $"{RandomGenerator.RandomString(10)}", X = RandomGenerator.RandomInt(500, 5000), Y = RandomGenerator.RandomInt(500, 5000) });
@@ -57,49 +58,59 @@ class Program
         var minY = 4500;
         var maxY = 5500;
 
-        ConcurrentQueue<PackOfItems> solutions = new ConcurrentQueue<PackOfItems>();
-
         var maxX = 0;
-
         var interation = 0;
 
-        Parallel.ForEach(A, itemA =>
-        {
-            Parallel.ForEach(B, itemB =>
-            {
-                Parallel.ForEach(C, itemC =>
-                {
-                    Parallel.ForEach(D, itemD =>
-                    {
-                        Parallel.ForEach(E, itemE =>
-                        {
-                            var totalX = itemA.X + itemB.X + itemC.X + itemD.X + itemE.X;
-                            var totalY = itemA.Y + itemB.Y + itemC.Y + itemD.Y + itemE.Y;
-                            interation++;
-                            //Console.WriteLine("Iteration " + interation);
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
 
-                            if ((minY <= totalY) && (totalY <= maxY))
-                            {
-                                if (totalX > maxX)
-                                {
-                                    maxX = totalX;
-                                    solutions.Clear();
-                                    solutions.Append(new PackOfItems { A = itemA, B = itemB, C = itemC, D = itemD, E = itemE, maxValue = maxX });
-                                    Console.WriteLine("Valid solution: Y: " + totalY + ", X: " + totalX);
-                                }
-                                else if (totalX == maxX)
-                                {
-                                    solutions.Append(new PackOfItems { A = itemA, B = itemB, C = itemC, D = itemD, E = itemE, maxValue = maxX });
-                                    Console.WriteLine("Valid solution: Y: " + totalY + ", X: " + totalX);
-                                }
-                            }
-                        });
-                    });
-                });
-            });
+        var query = from itemA in A.AsParallel()
+                    from itemB in B.AsParallel()
+                    from itemC in C.AsParallel()
+                    from itemD in D.AsParallel()
+                    from itemE in E.AsParallel()
+                    let totalX = itemA.X + itemB.X + itemC.X + itemD.X + itemE.X
+                    let totalY = itemA.Y + itemB.Y + itemC.Y + itemD.Y + itemE.Y
+                    where minY <= totalY && totalY <= maxY && totalX >= maxX
+                    select new PackOfItems { A = itemA, B = itemB, C = itemC, D = itemD, E = itemE, maxValue = totalX };
+
+        var solutions = new ConcurrentBag<PackOfItems>();
+
+        try { 
+        query.ForAll(result =>
+        {
+            if (stopwatch.Elapsed.TotalSeconds > 3)
+                throw new Exception();
+
+            Interlocked.Exchange(ref maxX, result.maxValue);
+
+            if (result.maxValue == maxX)
+            {
+                solutions.Add(result);
+                Console.WriteLine("Valid solution: Y: " + (result.A.Y + result.B.Y + result.C.Y + result.D.Y + result.E.Y) + ", X: " + result.maxValue);
+            }
+            else if (result.maxValue > maxX)
+            {
+                maxX = result.maxValue;
+                solutions.Clear();
+                solutions.Add(result);
+                Console.WriteLine("Valid solution: Y: " + (result.A.Y + result.B.Y + result.C.Y + result.D.Y + result.E.Y) + ", X: " + result.maxValue);
+            }
         });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Query cancelled.");
+        }
+        finally
+        {
+            stopwatch.Stop();
+            Console.WriteLine("Elapsed time: " + stopwatch.Elapsed.ToString("g"));
+        }
+
 
         var best = solutions.MaxBy(x => x.maxValue);
+        Console.WriteLine("Ended with solution: " + (best.A.Y + best.B.Y + best.C.Y + best.D.Y + best.E.Y) + ", X: " + best.maxValue);
     }
 }
 
