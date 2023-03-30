@@ -40,7 +40,7 @@ class Program
         //E.Add(new Item { name = "e2", X = 2000, Y = 2000 });
 
         //Random mock data
-        for (int i = 0; i < 1000000; i++)
+        for (int i = 0; i < 40; i++)
         {
             A.Add(new Item { name = $"{UtilityClass.RandomString(10)}", X = UtilityClass.RandomInt(500, 5000), Y = UtilityClass.RandomInt(500, 5000) });
             B.Add(new Item { name = $"{UtilityClass.RandomString(10)}", X = UtilityClass.RandomInt(500, 5000), Y = UtilityClass.RandomInt(500, 5000) });
@@ -64,28 +64,30 @@ class Program
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 
+        var targetBag = new ConcurrentBag<PackOfItems>();
 
-        var collections = new List<IEnumerable<PackOfItems>>();
-        collections.Add((IEnumerable<PackOfItems>)A);
-        collections.Add((IEnumerable<PackOfItems>)B);
-        collections.Add((IEnumerable<PackOfItems>)C);
-        collections.Add((IEnumerable<PackOfItems>)D);
-        collections.Add((IEnumerable<PackOfItems>)E);
+        var collections = new List<List<List<Item>>> { new List<List<Item>> { A.ToList() }, new List<List<Item>> { B.ToList() }, new List<List<Item>> { C.ToList() }, new List<List<Item>> { D.ToList() }, new List<List<Item>> { E.ToList() } };
         var permutations = UtilityClass.GeneratePermutations(collections);
 
         foreach (var permutation in permutations)
         {
-            var test = permutation.ElementAt(0);
-
-            var query = from itemA in permutation.ElementAt(0).AsParallel()
-                        from itemB in permutation.ElementAt(0).AsParallel()
-                        from itemC in permutation.ElementAt(0).AsParallel()
-                        from itemD in permutation.ElementAt(0).AsParallel()
-                        from itemE in permutation.ElementAt(0).AsParallel()
+            var query = from itemA in permutation[0].AsParallel().WithDegreeOfParallelism(10000)
+                        from itemB in permutation[1].AsParallel().WithDegreeOfParallelism(10000)
+                        from itemC in permutation[2].AsParallel().WithDegreeOfParallelism(10000)
+                        from itemD in permutation[3].AsParallel().WithDegreeOfParallelism(10000)
+                        from itemE in permutation[4].AsParallel().WithDegreeOfParallelism(10000)
                         let totalX = itemA.X + itemB.X + itemC.X + itemD.X + itemE.X
                         let totalY = itemA.Y + itemB.Y + itemC.Y + itemD.Y + itemE.Y
                         where minY <= totalY && totalY <= maxY && totalX >= maxX
-                        select new PackOfItems { A = itemA, B = itemB, C = itemC, D = itemD, E = itemE, maxValue = totalX };
+                        select new PackOfItems
+                        {
+                            A = itemA,
+                            B = itemB,
+                            C = itemC,
+                            D = itemD,
+                            E = itemE,
+                            maxValue = totalX
+                        };
 
             var solutions = new ConcurrentBag<PackOfItems>();
 
@@ -120,10 +122,14 @@ class Program
             {
                 stopwatch.Stop();
                 Console.WriteLine("Elapsed time: " + stopwatch.Elapsed.ToString("g"));
+                foreach (var item in solutions)
+                {
+                    targetBag.Add(item);
+                }
             }
         }
 
-        var best = solutions.MaxBy(x => x.maxValue);
+        var best = targetBag.MaxBy(x => x.maxValue);
         Console.WriteLine("Ended with solution: " + (best.A.Y + best.B.Y + best.C.Y + best.D.Y + best.E.Y) + ", X: " + best.maxValue);
     }
 }
@@ -142,11 +148,11 @@ public static class UtilityClass
         Random random = new Random();
         return random.Next(min, max);
     }
-    public static IEnumerable<IEnumerable<T>> GeneratePermutations<T>(List<IEnumerable<T>> collections)
+    public static IEnumerable<List<List<T>>> GeneratePermutations<T>(List<List<List<T>>> collections)
     {
         if (collections.Count == 1)
         {
-            return collections.First().Select(x => new[] { x });
+            return collections.First().Select(x => new List<List<T>> { x });
         }
 
         var currentCollection = collections.First();
@@ -155,6 +161,7 @@ public static class UtilityClass
 
         return currentCollection.SelectMany(item =>
             remainingPermutations.Select(permutation =>
-                new[] { item }.Concat(permutation)));
+                new List<List<T>> { item }.Concat(permutation).ToList()));
     }
+
 }
