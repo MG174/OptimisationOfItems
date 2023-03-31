@@ -1,6 +1,7 @@
-﻿using System.Collections.Concurrent;
+﻿using CsvHelper;
+using System.Collections.Concurrent;
 using System.Diagnostics;
-
+using System.Globalization;
 public class Item
 {
     public string name { get; set; }
@@ -21,32 +22,52 @@ class Program
 {
     public static void Main(string[] args)
     {
+        //var path = @"C:\Users\Maciej Goryczko\source\repos\HardwareOpimalization\HardwareOpimalization\files";
+
+        Console.WriteLine("Path:");
+        string path = Console.ReadLine();
+        Console.WriteLine("Amount:");
+        string amount = Console.ReadLine();
+        Console.WriteLine("Offset:");
+        string offset = Console.ReadLine();
+
+
+
+        //dev
+        path = @"C:\Users\Maciej Goryczko\source\repos\HardwareOpimalization\HardwareOpimalization\files";
+        amount = "5000";
+        offset = "10";
+
         List<Item> A = new List<Item>();
         List<Item> B = new List<Item>();
         List<Item> C = new List<Item>();
         List<Item> D = new List<Item>();
         List<Item> E = new List<Item>();
 
-        //Real data 
-        //A.Add(new Item { name = "a1", X = 5000, Y = 1000 });
-        //A.Add(new Item { name = "a2", X = 2000, Y = 1000 });
-        //B.Add(new Item { name = "b1", X = 1400, Y = 1000 });
-        //B.Add(new Item { name = "b2", X = 2000, Y = 900 });
-        //C.Add(new Item { name = "c1", X = 1300, Y = 1000 });
-        //C.Add(new Item { name = "c2", X = 2000, Y = 900 });
-        //D.Add(new Item { name = "d1", X = 6000, Y = 1000 });
-        //D.Add(new Item { name = "d2", X = 2000, Y = 1500 });
-        //E.Add(new Item { name = "e1", X = 1100, Y = 1000 });
-        //E.Add(new Item { name = "e2", X = 2000, Y = 2000 });
+        var readerA = new StreamReader(path + @"\inputA.csv");
+        var readerB = new StreamReader(path + @"\inputB.csv");
+        var readerC = new StreamReader(path + @"\inputC.csv");
+        var readerD = new StreamReader(path + @"\inputD.csv");
+        var readerE = new StreamReader(path + @"\inputE.csv");
+        var csvA = new CsvReader(readerA, CultureInfo.InvariantCulture);
+        var csvB = new CsvReader(readerA, CultureInfo.InvariantCulture);
+        var csvC = new CsvReader(readerA, CultureInfo.InvariantCulture);
+        var csvD = new CsvReader(readerA, CultureInfo.InvariantCulture);
+        var csvE = new CsvReader(readerA, CultureInfo.InvariantCulture);
+        A = csvA.GetRecords<Item>().ToList();
+        B = csvB.GetRecords<Item>().ToList();
+        C = csvC.GetRecords<Item>().ToList();
+        D = csvD.GetRecords<Item>().ToList();
+        E = csvE.GetRecords<Item>().ToList();
 
         //Random mock data
-        for (int i = 0; i < 1000000; i++)
+        for (int i = 0; i < 40; i++)
         {
-            A.Add(new Item { name = $"{RandomGenerator.RandomString(10)}", X = RandomGenerator.RandomInt(500, 5000), Y = RandomGenerator.RandomInt(500, 5000) });
-            B.Add(new Item { name = $"{RandomGenerator.RandomString(10)}", X = RandomGenerator.RandomInt(500, 5000), Y = RandomGenerator.RandomInt(500, 5000) });
-            C.Add(new Item { name = $"{RandomGenerator.RandomString(10)}", X = RandomGenerator.RandomInt(500, 5000), Y = RandomGenerator.RandomInt(500, 5000) });
-            D.Add(new Item { name = $"{RandomGenerator.RandomString(10)}", X = RandomGenerator.RandomInt(500, 5000), Y = RandomGenerator.RandomInt(500, 5000) });
-            E.Add(new Item { name = $"{RandomGenerator.RandomString(10)}", X = RandomGenerator.RandomInt(500, 5000), Y = RandomGenerator.RandomInt(500, 5000) });
+            A.Add(new Item { name = $"{Utility.RandomString(10)}", X = Utility.RandomInt(500, 5000), Y = Utility.RandomInt(500, 5000) });
+            B.Add(new Item { name = $"{Utility.RandomString(10)}", X = Utility.RandomInt(500, 5000), Y = Utility.RandomInt(500, 5000) });
+            C.Add(new Item { name = $"{Utility.RandomString(10)}", X = Utility.RandomInt(500, 5000), Y = Utility.RandomInt(500, 5000) });
+            D.Add(new Item { name = $"{Utility.RandomString(10)}", X = Utility.RandomInt(500, 5000), Y = Utility.RandomInt(500, 5000) });
+            E.Add(new Item { name = $"{Utility.RandomString(10)}", X = Utility.RandomInt(500, 5000), Y = Utility.RandomInt(500, 5000) });
         }
 
         A = A.OrderByDescending(x => x.X / x.Y).ToList();
@@ -55,8 +76,8 @@ class Program
         D = D.OrderByDescending(x => x.X / x.Y).ToList();
         E = E.OrderByDescending(x => x.X / x.Y).ToList();
 
-        var minY = 4500;
-        var maxY = 5500;
+        var minY = Double.Parse(amount) * (1 - (Double.Parse(offset) / 100));
+        var maxY = Double.Parse(amount) * (1 + (Double.Parse(offset) / 100));
 
         var maxX = 0;
         var interation = 0;
@@ -76,27 +97,28 @@ class Program
 
         var solutions = new ConcurrentBag<PackOfItems>();
 
-        try { 
-        query.ForAll(result =>
+        try
         {
-            if (stopwatch.Elapsed.TotalSeconds > 3)
-                throw new Exception();
-
-            Interlocked.Exchange(ref maxX, result.maxValue);
-
-            if (result.maxValue == maxX)
+            query.ForAll(result =>
             {
-                solutions.Add(result);
-                Console.WriteLine("Valid solution: Y: " + (result.A.Y + result.B.Y + result.C.Y + result.D.Y + result.E.Y) + ", X: " + result.maxValue);
-            }
-            else if (result.maxValue > maxX)
-            {
-                maxX = result.maxValue;
-                solutions.Clear();
-                solutions.Add(result);
-                Console.WriteLine("Valid solution: Y: " + (result.A.Y + result.B.Y + result.C.Y + result.D.Y + result.E.Y) + ", X: " + result.maxValue);
-            }
-        });
+                if (stopwatch.Elapsed.TotalSeconds > 5)
+                    throw new Exception();
+
+                Interlocked.Exchange(ref maxX, result.maxValue);
+
+                if (result.maxValue == maxX)
+                {
+                    solutions.Add(result);
+                    Console.WriteLine("Valid solution: Y: " + (result.A.Y + result.B.Y + result.C.Y + result.D.Y + result.E.Y) + ", X: " + result.maxValue);
+                }
+                else if (result.maxValue > maxX)
+                {
+                    maxX = result.maxValue;
+                    solutions.Clear();
+                    solutions.Add(result);
+                    Console.WriteLine("Valid solution: Y: " + (result.A.Y + result.B.Y + result.C.Y + result.D.Y + result.E.Y) + ", X: " + result.maxValue);
+                }
+            });
         }
         catch (Exception ex)
         {
@@ -114,7 +136,7 @@ class Program
     }
 }
 
-public static class RandomGenerator
+public static class Utility
 {
     public static string RandomString(int length)
     {
