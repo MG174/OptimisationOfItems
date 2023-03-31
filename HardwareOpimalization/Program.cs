@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
@@ -16,27 +17,46 @@ public class PackOfItems
     public Item D { get; set; }
     public Item E { get; set; }
     public int maxValue { get; set; }
+    public int TotalCost { get; set; }
 }
 
 class Program
 {
     public static void Main(string[] args)
     {
-        //var path = @"C:\Users\Maciej Goryczko\source\repos\HardwareOpimalization\HardwareOpimalization\files";
-
-        Console.WriteLine("Path:");
+        Console.WriteLine("Ścieżka:");
         string path = Console.ReadLine();
-        Console.WriteLine("Amount:");
+        Console.WriteLine("Kwota:");
         string amount = Console.ReadLine();
-        Console.WriteLine("Offset:");
+        Console.WriteLine("Odchylenie:");
         string offset = Console.ReadLine();
+        Console.WriteLine("Liczba rozwiązań:");
+        string solutionNumber = Console.ReadLine();
 
+        Console.WriteLine("Istotność podzespołów (zakres 0-10)");
+        Console.WriteLine("Procesor:");
+        string multiplierA = Console.ReadLine();
+        Console.WriteLine("Karta Graficzna:");
+        string multiplierB = Console.ReadLine();
+        Console.WriteLine("Dysk:");
+        string multiplierC = Console.ReadLine();
+        Console.WriteLine("RAM:");
+        string multiplierD = Console.ReadLine();
+        Console.WriteLine("Płyta Główna:");
+        string multiplierE = Console.ReadLine();
 
+        Console.WriteLine("Obliczanie rozwiązań");
 
         //dev
         path = @"C:\Users\Maciej Goryczko\source\repos\HardwareOpimalization\HardwareOpimalization\files";
-        amount = "5000";
+        amount = "10000";
         offset = "10";
+        solutionNumber = "5";
+        multiplierA = "2";
+        multiplierB = "2";
+        multiplierC = "2";
+        multiplierD = "2";
+        multiplierE = "2";
 
         List<Item> A = new List<Item>();
         List<Item> B = new List<Item>();
@@ -50,25 +70,21 @@ class Program
         var readerD = new StreamReader(path + @"\inputD.csv");
         var readerE = new StreamReader(path + @"\inputE.csv");
         var csvA = new CsvReader(readerA, CultureInfo.InvariantCulture);
-        var csvB = new CsvReader(readerA, CultureInfo.InvariantCulture);
-        var csvC = new CsvReader(readerA, CultureInfo.InvariantCulture);
-        var csvD = new CsvReader(readerA, CultureInfo.InvariantCulture);
-        var csvE = new CsvReader(readerA, CultureInfo.InvariantCulture);
+        var csvB = new CsvReader(readerB, CultureInfo.InvariantCulture);
+        var csvC = new CsvReader(readerC, CultureInfo.InvariantCulture);
+        var csvD = new CsvReader(readerD, CultureInfo.InvariantCulture);
+        var csvE = new CsvReader(readerE, CultureInfo.InvariantCulture);
         A = csvA.GetRecords<Item>().ToList();
         B = csvB.GetRecords<Item>().ToList();
         C = csvC.GetRecords<Item>().ToList();
         D = csvD.GetRecords<Item>().ToList();
         E = csvE.GetRecords<Item>().ToList();
 
-        //Random mock data
-        for (int i = 0; i < 40; i++)
-        {
-            A.Add(new Item { name = $"{Utility.RandomString(10)}", X = Utility.RandomInt(500, 5000), Y = Utility.RandomInt(500, 5000) });
-            B.Add(new Item { name = $"{Utility.RandomString(10)}", X = Utility.RandomInt(500, 5000), Y = Utility.RandomInt(500, 5000) });
-            C.Add(new Item { name = $"{Utility.RandomString(10)}", X = Utility.RandomInt(500, 5000), Y = Utility.RandomInt(500, 5000) });
-            D.Add(new Item { name = $"{Utility.RandomString(10)}", X = Utility.RandomInt(500, 5000), Y = Utility.RandomInt(500, 5000) });
-            E.Add(new Item { name = $"{Utility.RandomString(10)}", X = Utility.RandomInt(500, 5000), Y = Utility.RandomInt(500, 5000) });
-        }
+        A.ForEach(x => x.X = (int)(Utility.Remap(x.X, A.MinBy(x => x.X).X, A.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierA) / 10))));
+        B.ForEach(x => x.X = (int)(Utility.Remap(x.X, B.MinBy(x => x.X).X, B.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierB) / 10))));
+        C.ForEach(x => x.X = (int)(Utility.Remap(x.X, C.MinBy(x => x.X).X, C.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierC) / 10))));
+        D.ForEach(x => x.X = (int)(Utility.Remap(x.X, D.MinBy(x => x.X).X, D.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierD) / 10))));
+        E.ForEach(x => x.X = (int)(Utility.Remap(x.X, E.MinBy(x => x.X).X, E.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierE) / 10))));
 
         A = A.OrderByDescending(x => x.X / x.Y).ToList();
         B = B.OrderByDescending(x => x.X / x.Y).ToList();
@@ -80,7 +96,6 @@ class Program
         var maxY = Double.Parse(amount) * (1 + (Double.Parse(offset) / 100));
 
         var maxX = 0;
-        var interation = 0;
 
         var stopwatch = new Stopwatch();
         stopwatch.Start();
@@ -93,7 +108,7 @@ class Program
                     let totalX = itemA.X + itemB.X + itemC.X + itemD.X + itemE.X
                     let totalY = itemA.Y + itemB.Y + itemC.Y + itemD.Y + itemE.Y
                     where minY <= totalY && totalY <= maxY && totalX >= maxX
-                    select new PackOfItems { A = itemA, B = itemB, C = itemC, D = itemD, E = itemE, maxValue = totalX };
+                    select new PackOfItems { A = itemA, B = itemB, C = itemC, D = itemD, E = itemE, maxValue = totalX, TotalCost = totalY };
 
         var solutions = new ConcurrentBag<PackOfItems>();
 
@@ -109,30 +124,31 @@ class Program
                 if (result.maxValue == maxX)
                 {
                     solutions.Add(result);
-                    Console.WriteLine("Valid solution: Y: " + (result.A.Y + result.B.Y + result.C.Y + result.D.Y + result.E.Y) + ", X: " + result.maxValue);
+                    Console.WriteLine("Znaleziono rozwiązanie: Y: " + (result.A.Y + result.B.Y + result.C.Y + result.D.Y + result.E.Y) + ", X: " + result.maxValue);
                 }
                 else if (result.maxValue > maxX)
                 {
                     maxX = result.maxValue;
                     solutions.Clear();
                     solutions.Add(result);
-                    Console.WriteLine("Valid solution: Y: " + (result.A.Y + result.B.Y + result.C.Y + result.D.Y + result.E.Y) + ", X: " + result.maxValue);
+                    Console.WriteLine("Znaleziono rozwiązanie: Y: " + (result.A.Y + result.B.Y + result.C.Y + result.D.Y + result.E.Y) + ", X: " + result.maxValue);
                 }
             });
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Query cancelled.");
+            Console.WriteLine("Anulowano kwerendę.");
         }
         finally
         {
             stopwatch.Stop();
-            Console.WriteLine("Elapsed time: " + stopwatch.Elapsed.ToString("g"));
+            Console.WriteLine("Czas kwerendy: " + stopwatch.Elapsed.ToString("g"));
         }
 
-
-        var best = solutions.MaxBy(x => x.maxValue);
-        Console.WriteLine("Ended with solution: " + (best.A.Y + best.B.Y + best.C.Y + best.D.Y + best.E.Y) + ", X: " + best.maxValue);
+        var best = solutions.OrderByDescending(x => x.maxValue).ToList().Take(Int32.Parse(solutionNumber));
+        string fileName = path + @"\solution.json";
+        string json = JsonConvert.SerializeObject(best, Formatting.Indented);
+        File.WriteAllText(fileName, json);
     }
 }
 
@@ -149,5 +165,19 @@ public static class Utility
     {
         Random random = new Random();
         return random.Next(min, max);
+    }
+    public static float Remap(this float from, float fromMin, float fromMax, float toMin, float toMax)
+    {
+        var fromAbs = from - fromMin;
+        var fromMaxAbs = fromMax - fromMin;
+
+        var normal = fromAbs / fromMaxAbs;
+
+        var toMaxAbs = toMax - toMin;
+        var toAbs = toMaxAbs * normal;
+
+        var to = toAbs + toMin;
+
+        return to;
     }
 }
