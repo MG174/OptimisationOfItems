@@ -1,9 +1,38 @@
 [
   {
     "A": {
-      "name": "MSI MPG Z790 EDGE WIFI",
+      "name": "ASRock Z790 Taichi Carrara",
       "X": 120,
-      "Y": 2219
+      "Y": 2699
+    },
+    "B": {
+      "name": "Gigabyte B760 A MASTER DDR4",
+      "X": 120,
+      "Y": 1199
+    },
+    "C": {
+      "name": "Gigabyte B760 A MASTER DDR4",
+      "X": 120,
+      "Y": 1199
+    },
+    "D": {
+      "name": "Gigabyte B760 A MASTER DDR4",
+      "X": 120,
+      "Y": 1199
+    },
+    "E": {
+      "name": "ASUS ROG STRIX Z790‑E GAMING WIFI",
+      "X": 120,
+      "Y": 2999
+    },
+    "maxValue": 600,
+    "TotalCost": 9295
+  },
+  {
+    "A": {
+      "name": "ASRock Z790 Taichi Carrara",
+      "X": 120,
+      "Y": 2699
     },
     "B": {
       "name": "Gigabyte B760 A MASTER DDR4",
@@ -21,18 +50,18 @@
       "Y": 2999
     },
     "E": {
-      "name": "ASUS ROG STRIX Z790‑E GAMING WIFI",
+      "name": "Gigabyte B760 A MASTER DDR4",
       "X": 120,
-      "Y": 2999
+      "Y": 1199
     },
     "maxValue": 600,
-    "TotalCost": 10615
+    "TotalCost": 9295
   },
   {
     "A": {
-      "name": "MSI MPG Z790 EDGE WIFI",
+      "name": "ASRock Z790 Taichi Carrara",
       "X": 120,
-      "Y": 2219
+      "Y": 2699
     },
     "B": {
       "name": "Gigabyte B760 A MASTER DDR4",
@@ -53,44 +82,44 @@
       "name": "ASRock Z790 Taichi Carrara",
       "X": 120,
       "Y": 2699
+    },
+    "maxValue": 600,
+    "TotalCost": 10795
+  },
+  {
+    "A": {
+      "name": "ASRock Z790 Taichi Carrara",
+      "X": 120,
+      "Y": 2699
+    },
+    "B": {
+      "name": "Gigabyte B760 A MASTER DDR4",
+      "X": 120,
+      "Y": 1199
+    },
+    "C": {
+      "name": "Gigabyte B760 A MASTER DDR4",
+      "X": 120,
+      "Y": 1199
+    },
+    "D": {
+      "name": "ASUS ROG STRIX Z790‑E GAMING WIFI",
+      "X": 120,
+      "Y": 2999
+    },
+    "E": {
+      "name": "MSI MPG Z790 EDGE WIFI",
+      "X": 120,
+      "Y": 2219
     },
     "maxValue": 600,
     "TotalCost": 10315
   },
   {
     "A": {
-      "name": "MSI MPG Z790 EDGE WIFI",
+      "name": "ASRock Z790 Taichi Carrara",
       "X": 120,
-      "Y": 2219
-    },
-    "B": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "C": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "D": {
-      "name": "ASUS ROG STRIX Z790‑E GAMING WIFI",
-      "X": 120,
-      "Y": 2999
-    },
-    "E": {
-      "name": "MSI MPG Z790 EDGE WIFI",
-      "X": 120,
-      "Y": 2219
-    },
-    "maxValue": 600,
-    "TotalCost": 9835
-  },
-  {
-    "A": {
-      "name": "MSI MPG Z790 EDGE WIFI",
-      "X": 120,
-      "Y": 2219
+      "Y": 2699
     },
     "B": {
       "name": "Gigabyte B760 A MASTER DDR4",
@@ -113,35 +142,6 @@
       "Y": 2999
     },
     "maxValue": 600,
-    "TotalCost": 10315
-  },
-  {
-    "A": {
-      "name": "MSI MPG Z790 EDGE WIFI",
-      "X": 120,
-      "Y": 2219
-    },
-    "B": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "C": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "D": {
-      "name": "ASRock Z790 Taichi Carrara",
-      "X": 120,
-      "Y": 2699
-    },
-    "E": {
-      "name": "ASRock Z790 Taichi Carrara",
-      "X": 120,
-      "Y": 2699
-    },
-    "maxValue": 600,
-    "TotalCost": 10015
+    "TotalCost": 10795
   }
 ]

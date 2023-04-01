@@ -24,6 +24,9 @@ class Program
 {
     public static void Main(string[] args)
     {
+
+        #region Ładowanie danych
+
         Console.WriteLine("Ścieżka:");
         string path = Console.ReadLine();
         Console.WriteLine("Kwota:");
@@ -45,18 +48,9 @@ class Program
         Console.WriteLine("Płyta Główna:");
         string multiplierE = Console.ReadLine();
 
+        Console.WriteLine("------------------");
         Console.WriteLine("Obliczanie rozwiązań");
-
-        //dev
-        path = @"C:\Users\Maciej Goryczko\source\repos\HardwareOpimalization\HardwareOpimalization\files";
-        amount = "10000";
-        offset = "10";
-        solutionNumber = "5";
-        multiplierA = "2";
-        multiplierB = "2";
-        multiplierC = "2";
-        multiplierD = "2";
-        multiplierE = "2";
+        Console.WriteLine("------------------");
 
         List<Item> A = new List<Item>();
         List<Item> B = new List<Item>();
@@ -80,6 +74,10 @@ class Program
         D = csvD.GetRecords<Item>().ToList();
         E = csvE.GetRecords<Item>().ToList();
 
+        #endregion
+
+        #region Transformacja danych
+
         A.ForEach(x => x.X = (int)(Utility.Remap(x.X, A.MinBy(x => x.X).X, A.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierA) / 10))));
         B.ForEach(x => x.X = (int)(Utility.Remap(x.X, B.MinBy(x => x.X).X, B.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierB) / 10))));
         C.ForEach(x => x.X = (int)(Utility.Remap(x.X, C.MinBy(x => x.X).X, C.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierC) / 10))));
@@ -92,11 +90,13 @@ class Program
         D = D.OrderByDescending(x => x.X / x.Y).ToList();
         E = E.OrderByDescending(x => x.X / x.Y).ToList();
 
+        #endregion
+
+        #region Porównanie wszystkich możliwych kombinacji
+
         var minY = Double.Parse(amount) * (1 - (Double.Parse(offset) / 100));
         var maxY = Double.Parse(amount) * (1 + (Double.Parse(offset) / 100));
-
         var maxX = 0;
-
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 
@@ -145,10 +145,16 @@ class Program
             Console.WriteLine("Czas kwerendy: " + stopwatch.Elapsed.ToString("g"));
         }
 
+        #endregion
+
+        #region Wylistowanie wyników do pliku
+
         var best = solutions.OrderByDescending(x => x.maxValue).ToList().Take(Int32.Parse(solutionNumber));
         string fileName = path + @"\solution.json";
         string json = JsonConvert.SerializeObject(best, Formatting.Indented);
         File.WriteAllText(fileName, json);
+
+        #endregion
     }
 }
 
