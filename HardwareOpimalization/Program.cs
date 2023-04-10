@@ -52,16 +52,6 @@ class Program
         Console.WriteLine("Obliczanie rozwiązań");
         Console.WriteLine("------------------");
 
-        path = @"C:\Users\Maciej Goryczko\source\repos\HardwareOpimalization\HardwareOpimalization\files";
-        amount = "13000";
-        offset = "10";
-        solutionNumber = "5";
-        multiplierA = "0";
-        multiplierB = "10";
-        multiplierC = "5";
-        multiplierD = "0";
-        multiplierE = "0";
-
         List<Item> A = new List<Item>();
         List<Item> B = new List<Item>();
         List<Item> C = new List<Item>();
