@@ -52,6 +52,16 @@ class Program
         Console.WriteLine("Obliczanie rozwiązań");
         Console.WriteLine("------------------");
 
+        path = @"C:\Users\Maciej Goryczko\source\repos\HardwareOpimalization\HardwareOpimalization\files";
+        amount = "13000";
+        offset = "10";
+        solutionNumber = "5";
+        multiplierA = "0";
+        multiplierB = "10";
+        multiplierC = "5";
+        multiplierD = "0";
+        multiplierE = "0";
+
         List<Item> A = new List<Item>();
         List<Item> B = new List<Item>();
         List<Item> C = new List<Item>();
@@ -78,11 +88,22 @@ class Program
 
         #region Transformacja danych
 
-        A.ForEach(x => x.X = (int)(Utility.Remap(x.X, A.MinBy(x => x.X).X, A.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierA) / 10))));
-        B.ForEach(x => x.X = (int)(Utility.Remap(x.X, B.MinBy(x => x.X).X, B.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierB) / 10))));
-        C.ForEach(x => x.X = (int)(Utility.Remap(x.X, C.MinBy(x => x.X).X, C.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierC) / 10))));
-        D.ForEach(x => x.X = (int)(Utility.Remap(x.X, D.MinBy(x => x.X).X, D.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierD) / 10))));
-        E.ForEach(x => x.X = (int)(Utility.Remap(x.X, E.MinBy(x => x.X).X, E.MaxBy(x => x.X).X, 1, 100) * (1 + (Double.Parse(multiplierE) / 10))));
+        var itemAminX = A.MinBy(x => x.X).X;
+        var itemAmaxX = A.MaxBy(x => x.X).X;
+        var itemBminX = B.MinBy(x => x.X).X;
+        var itemBmaxX = B.MaxBy(x => x.X).X;
+        var itemCminX = C.MinBy(x => x.X).X;
+        var itemCmaxX = C.MaxBy(x => x.X).X;
+        var itemDminX = D.MinBy(x => x.X).X;
+        var itemDmaxX = D.MaxBy(x => x.X).X;
+        var itemEminX = E.MinBy(x => x.X).X;
+        var itemEmaxX = E.MaxBy(x => x.X).X;
+
+        A.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemAminX, itemAmaxX,  1, 100, 0) * (1 + (Double.Parse(multiplierA) / 10))));
+        B.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemBminX, itemBmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierB) / 10))));
+        C.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemCminX, itemCmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierC) / 10))));
+        D.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemDminX, itemDmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierD) / 10))));
+        E.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemEminX, itemEmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierE) / 10))));
 
         A = A.OrderByDescending(x => x.X / x.Y).ToList();
         B = B.OrderByDescending(x => x.X / x.Y).ToList();
@@ -93,10 +114,10 @@ class Program
         #endregion
 
         #region Porównanie wszystkich możliwych kombinacji
-
+        
         var minY = Double.Parse(amount) * (1 - (Double.Parse(offset) / 100));
         var maxY = Double.Parse(amount) * (1 + (Double.Parse(offset) / 100));
-        var maxX = 0;
+        float maxX = 0;
         var stopwatch = new Stopwatch();
         stopwatch.Start();
 
@@ -172,18 +193,16 @@ public static class Utility
         Random random = new Random();
         return random.Next(min, max);
     }
-    public static float Remap(this float from, float fromMin, float fromMax, float toMin, float toMax)
+
+    public static double Remap(double sourceNumber, double fromA, double fromB, double toA, double toB, int decimalPrecision)
     {
-        var fromAbs = from - fromMin;
-        var fromMaxAbs = fromMax - fromMin;
-
-        var normal = fromAbs / fromMaxAbs;
-
-        var toMaxAbs = toMax - toMin;
-        var toAbs = toMaxAbs * normal;
-
-        var to = toAbs + toMin;
-
-        return to;
+        double deltaA = fromB - fromA;
+        double deltaB = toB - toA;
+        double scale = deltaB / deltaA;
+        double negA = -1 * fromA;
+        double offset = (negA * scale) + toA;
+        double finalNumber = (sourceNumber * scale) + offset;
+        int calcScale = (int)Math.Pow(10, decimalPrecision);
+        return (double)Math.Round(finalNumber * calcScale) / calcScale;
     }
 }

@@ -1,147 +1,147 @@
 [
   {
     "A": {
-      "name": "ASRock Z790 Taichi Carrara",
-      "X": 120,
-      "Y": 2699
+      "name": "Intel Core i9-13900KS",
+      "X": 100,
+      "Y": 3689
     },
     "B": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
+      "name": "AMD Radeon RX 7900 XT",
+      "X": 200,
+      "Y": 5149
     },
     "C": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
+      "name": "Lexar 1TB M.2 PCIe Gen4 NVMe NM800 Pro Heatsink",
+      "X": 150,
+      "Y": 385
     },
     "D": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "E": {
-      "name": "ASUS ROG STRIX Z790‑E GAMING WIFI",
-      "X": 120,
-      "Y": 2999
-    },
-    "maxValue": 600,
-    "TotalCost": 9295
-  },
-  {
-    "A": {
-      "name": "ASRock Z790 Taichi Carrara",
-      "X": 120,
-      "Y": 2699
-    },
-    "B": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "C": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "D": {
-      "name": "ASUS ROG STRIX Z790‑E GAMING WIFI",
-      "X": 120,
-      "Y": 2999
-    },
-    "E": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "maxValue": 600,
-    "TotalCost": 9295
-  },
-  {
-    "A": {
-      "name": "ASRock Z790 Taichi Carrara",
-      "X": 120,
-      "Y": 2699
-    },
-    "B": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "C": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "D": {
-      "name": "ASUS ROG STRIX Z790‑E GAMING WIFI",
-      "X": 120,
-      "Y": 2999
-    },
-    "E": {
-      "name": "ASRock Z790 Taichi Carrara",
-      "X": 120,
-      "Y": 2699
-    },
-    "maxValue": 600,
-    "TotalCost": 10795
-  },
-  {
-    "A": {
-      "name": "ASRock Z790 Taichi Carrara",
-      "X": 120,
-      "Y": 2699
-    },
-    "B": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "C": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
-    },
-    "D": {
-      "name": "ASUS ROG STRIX Z790‑E GAMING WIFI",
-      "X": 120,
-      "Y": 2999
+      "name": "Patriot Vipe Venom 7400",
+      "X": 100,
+      "Y": 1259
     },
     "E": {
       "name": "MSI MPG Z790 EDGE WIFI",
-      "X": 120,
+      "X": 100,
       "Y": 2219
     },
-    "maxValue": 600,
-    "TotalCost": 10315
+    "maxValue": 650,
+    "TotalCost": 12701
   },
   {
     "A": {
-      "name": "ASRock Z790 Taichi Carrara",
-      "X": 120,
-      "Y": 2699
+      "name": "Intel Core i9-13900KS",
+      "X": 100,
+      "Y": 3689
     },
     "B": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
+      "name": "AMD Radeon RX 7900 XT",
+      "X": 200,
+      "Y": 5149
     },
     "C": {
-      "name": "Gigabyte B760 A MASTER DDR4",
-      "X": 120,
-      "Y": 1199
+      "name": "Lexar 1TB M.2 PCIe Gen4 NVMe NM800 Pro",
+      "X": 150,
+      "Y": 365
     },
     "D": {
-      "name": "ASRock Z790 Taichi Carrara",
-      "X": 120,
-      "Y": 2699
+      "name": "Patriot Vipe Venom 7400",
+      "X": 100,
+      "Y": 1259
     },
     "E": {
-      "name": "ASUS ROG STRIX Z790‑E GAMING WIFI",
-      "X": 120,
-      "Y": 2999
+      "name": "MSI MPG Z790 EDGE WIFI",
+      "X": 100,
+      "Y": 2219
     },
-    "maxValue": 600,
-    "TotalCost": 10795
+    "maxValue": 650,
+    "TotalCost": 12681
+  },
+  {
+    "A": {
+      "name": "Intel Core i9-13900K",
+      "X": 95,
+      "Y": 3148
+    },
+    "B": {
+      "name": "AMD Radeon RX 7900 XT",
+      "X": 200,
+      "Y": 5149
+    },
+    "C": {
+      "name": "Lexar 1TB M.2 PCIe Gen4 NVMe NM800 Pro Heatsink",
+      "X": 150,
+      "Y": 385
+    },
+    "D": {
+      "name": "Patriot Vipe Venom 7400",
+      "X": 100,
+      "Y": 1259
+    },
+    "E": {
+      "name": "MSI MPG Z790 EDGE WIFI",
+      "X": 100,
+      "Y": 2219
+    },
+    "maxValue": 645,
+    "TotalCost": 12160
+  },
+  {
+    "A": {
+      "name": "Intel Core i9-13900K",
+      "X": 95,
+      "Y": 3148
+    },
+    "B": {
+      "name": "AMD Radeon RX 7900 XT",
+      "X": 200,
+      "Y": 5149
+    },
+    "C": {
+      "name": "Lexar 1TB M.2 PCIe Gen4 NVMe NM800 Pro",
+      "X": 150,
+      "Y": 365
+    },
+    "D": {
+      "name": "Patriot Vipe Venom 7400",
+      "X": 100,
+      "Y": 1259
+    },
+    "E": {
+      "name": "MSI MPG Z790 EDGE WIFI",
+      "X": 100,
+      "Y": 2219
+    },
+    "maxValue": 645,
+    "TotalCost": 12140
+  },
+  {
+    "A": {
+      "name": "Intel Core i9-13900K",
+      "X": 95,
+      "Y": 3148
+    },
+    "B": {
+      "name": "AMD Radeon RX 7900 XT",
+      "X": 200,
+      "Y": 5149
+    },
+    "C": {
+      "name": "Lexar 1TB M.2 PCIe Gen4 NVMe NM800 Pro",
+      "X": 150,
+      "Y": 365
+    },
+    "D": {
+      "name": "Patriot Vipe Venom 7200",
+      "X": 92,
+      "Y": 1179
+    },
+    "E": {
+      "name": "MSI MPG Z790 EDGE WIFI",
+      "X": 100,
+      "Y": 2219
+    },
+    "maxValue": 637,
+    "TotalCost": 12060
   }
 ]
