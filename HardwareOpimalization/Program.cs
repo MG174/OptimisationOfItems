@@ -89,11 +89,11 @@ class Program
         var itemEminX = E.MinBy(x => x.X).X;
         var itemEmaxX = E.MaxBy(x => x.X).X;
 
-        A.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemAminX, itemAmaxX,  1, 100, 0) * (1 + (Double.Parse(multiplierA) / 10))));
-        B.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemBminX, itemBmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierB) / 10))));
-        C.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemCminX, itemCmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierC) / 10))));
-        D.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemDminX, itemDmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierD) / 10))));
-        E.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemEminX, itemEmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierE) / 10))));
+        A.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemAminX, itemAmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierA!) / 10))));
+        B.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemBminX, itemBmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierB!) / 10))));
+        C.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemCminX, itemCmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierC!) / 10))));
+        D.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemDminX, itemDmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierD!) / 10))));
+        E.ForEach(x => x.X = (int)(Utility.Remap(x.X, itemEminX, itemEmaxX, 1, 100, 0) * (1 + (Double.Parse(multiplierE!) / 10))));
 
         A = A.OrderByDescending(x => x.X / x.Y).ToList();
         B = B.OrderByDescending(x => x.X / x.Y).ToList();
@@ -104,7 +104,7 @@ class Program
         #endregion
 
         #region Porównanie wszystkich możliwych kombinacji
-        
+
         var minY = Double.Parse(amount) * (1 - (Double.Parse(offset) / 100));
         var maxY = Double.Parse(amount) * (1 + (Double.Parse(offset) / 100));
         float maxX = 0;
